@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+                <p:growl autoUpdate="true"/>
+                <h:form id="AgregM">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="Nro Mesa"/>
+                        <p:inputText value="#{mesaC.mesa.NUM_MESA}" required="true" requiredMessage="Numero de mesa Requerido"/>
+                        <p:outputLabel value="Nro Sillas"/>
+                        <p:inputText value="#{mesaC.mesa.CANT_SILLAS_MESA}" required="true" requiredMessage="Numero de sillas Requerido"/>
+                        <p:commandButton value="Agregar" actionListener="#{mesaC.registrar()}" update="ListTabl"/>
+                    </p:panelGrid>
+                </h:form>
+
+                <h:form id="ListTabl">
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:dataTable var="listTblM" value="#{mesaC.lstMesa}" rows="10"
+                                 paginator="true"
+                                 paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <f:facet name="header">
+                            Listado de Mesas
+                        </f:facet>
+
+                        <p:column headerText="Nro de Mesa">
+                            <p:outputLabel value="#{listTblM.NUM_MESA}"/>
+                        </p:column>
+
+                        <p:column headerText="Nro de sillas">
+                            <p:outputLabel value="#{listTblM.CANT_SILLAS_MESA}"/>
+                        </p:column>
+
+
+                        <p:column   exportable="false">
+                            <p:commandButton value="#{listTblM}" title="MODIFICAR" icon="ui-icon-pencil" oncomplete="PF('WigactuaM').show();" update=":foredit">
+                                <f:setPropertyActionListener value="#{listTblM}" target="#{mesaC.selectmes}"/>
+                            </p:commandButton>
+                            <p:tooltip showEffect="clip" hideEffect="explode" position="top"/>     
+                        </p:column> 
+                    </p:dataTable>
+                </h:form>
+
+
+                <p:dialog widgetVar="WigactuaM" responsive="true" >
+                    <h:form id="foredit">
+                        <p:outputLabel value="Nro Mesa"/>
+                        <p:inputText value="#{mesaC.selectmes.NUM_MESA}" required="true" requiredMessage="Numero de mesa Requerido"/>
+                        <p:outputLabel value="Nro Sillas"/>
+                        <p:inputText value="#{mesaC.selectmes.CANT_SILLAS_MESA}" required="true" requiredMessage="Numero de sillas Requerido"/>
+                        <p:selectOneMenu value="#{mesaC.selectmes.ESTADO}">
+                            <f:selectItem itemLabel="Activo" itemValue="A"/>
+                            <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                        </p:selectOneMenu>
+                        <p:commandButton value="Actualizar" actionListener="#{mesaC.modificar()}" update=":ListTabl" oncomplete="PF('WigactuaM').hide()"/>
+                    </h:form>
+                </p:dialog>
+
+    </h:body>
+</html>
